@@ -67,7 +67,7 @@
 
  <div class="glass-panel rounded-[28px] p-6 mb-6 relative overflow-hidden">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur-md border border-white/50 flex items-center justify-center text-2xl shadow-sm">✈️</div>
+                    <div class="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur-md border border-white/50 flex items-center justify-center text-2xl shadow-sm"✈️</div>
                     <div>
                         <p class="text-[11px] text-gray-500 font-bold tracking-widest uppercase mb-0.5">Flight Info</p>
                         <h2 class="text-lg font-bold text-gray-900 leading-tight">釜山航空 Air Busan</h2>
@@ -1538,6 +1538,14 @@
         }
 
         renderHome();
-    </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker 已註冊！', reg))
+        .catch(err => console.log('註冊失敗：', err));
+    });
+  }
+</script>
 </body>
 </html>
