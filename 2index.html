@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>2026 釜山旅行</title>
+    
+    <link rel="apple-touch-icon" href="images/app-icon.png">
+    <meta name="apple-mobile-web-app-title" content="釜山行">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* 這個是「全站字級倍率」，之後用 JS 切換 */
+    --text-scale: 1;
+  }
+
+  body { 
+    font-family: "Inter", "Noto Sans TC", "Noto Sans KR", sans-serif; 
+    color: #1d1d1f; 
+    -webkit-tap-highlight-color: transparent;
+
+    background-color: #F2F2F7;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(200, 225, 255, 0.5) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(255, 220, 240, 0.5) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(220, 240, 255, 0.5) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(240, 230, 255, 0.5) 0px, transparent 50%);
+    background-attachment: fixed;
+    background-size: 100% 100%;
+
+    /* ✅ 修正你原本寫錯的：min-h-screen 不是 CSS 屬性 */
+    min-height: 100vh;
+
+    /* ✅ 防止放大後橫向跑版 */
+    width: 100%;
+    overflow-x: hidden;
+
+    /* ✅ 全站字級倍率（後面用按鈕切） */
+    font-size: calc(16px * var(--text-scale));
+    line-height: 1.6;
+  }
+
+  /* ✅ 內容容器也鎖寬，避免字變大造成水平捲動 */
+  #app{
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .glass-card:active {
+    transform: scale(0.97);
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .ios-title { font-weight: 800; letter-spacing: -0.025em; }
+  .page-container { transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s ease; }
+  .slide-out-left { transform: translateX(-30%); opacity: 0; pointer-events: none; }
+  .slide-in-right { transform: translateX(100%); position: absolute; top: 0; width: 100%; }
+  .slide-active { transform: translateX(0); }
+  .kr-text { font-family: "Noto Sans KR", sans-serif; }
+</style>
+</head>
+<body class="antialiased relative text-[#1d1d1f]">
+
+  <div id="app" class="max-w-md mx-auto min-h-screen relative">
+    
+    <div id="home-view" class="page-container min-h-screen pb-12 pt-10 px-5">
+      <header class="mb-6 px-1 flex items-start justify-between gap-3">
+        <div>
+          <p class="text-[13px] font-semibold text-gray-500 uppercase tracking-widest mb-1 ml-0.5">2026 Family Trip</p>
+          <h1 class="text-[40px] leading-[1.1] ios-title text-black">Busan<br>Journey</h1>
+        </div>
+
+        <!-- ✅ 字級切換 -->
+        <div class="flex items-center gap-2 mt-1">
+          <button type="button" data-scale="1"
+            class="text-xs font-bold px-2.5 py-1.5 rounded-xl bg-white/70 border border-white/60 shadow-sm active:scale-95">
+            A
+          </button>
+          <button type="button" data-scale="1.125"
+            class="text-xs font-bold px-2.5 py-1.5 rounded-xl bg-white/70 border border-white/60 shadow-sm active:scale-95">
+            A+
+          </button>
+          <button type="button" data-scale="1.25"
+            class="text-xs font-bold px-2.5 py-1.5 rounded-xl bg-white/70 border border-white/60 shadow-sm active:scale-95">
+            A++
+          </button>
+        </div>
+      </header>
+
+ <div class="glass-panel rounded-[28px] p-6 mb-6 relative overflow-hidden">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur-md border border-white/50 flex items-center justify-center text-2xl shadow-sm">✈️</div>
+                    <div>
+                        <p class="text-[11px] text-gray-500 font-bold tracking-widest uppercase mb-0.5">Flight Info</p>
+                        <h2 class="text-lg font-bold text-gray-900 leading-tight">釜山航空 Air Busan</h2>
+                        <p class="text-xs text-gray-500 mt-0.5 font-medium">高雄 KHH ⇄ 釜山 PUS</p>
+                    </div>
+                </div>
+
+                <div class="bg-white/40 rounded-2xl p-3 border border-white/40 mb-2">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">去程</span>
+                        <span class="text-xs font-bold text-gray-700">BX796</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-800 font-bold">
+                        <span>15:00 KHH</span>
+                        <span class="text-gray-400">➜</span>
+                        <span>18:25 PUS</span>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-gray-500 mt-1">
+                        <span>1/14 (三)</span>
+                        <span class="font-mono">飛行 02h 25m</span>
+                    </div>
+                </div>
+
+                <div class="bg-white/40 rounded-2xl p-3 border border-white/40 mb-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-bold text-pink-600 bg-pink-100 px-1.5 py-0.5 rounded">回程</span>
+                        <span class="text-xs font-bold text-gray-700">BX795</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-800 font-bold">
+                        <span>12:00 PUS</span>
+                        <span class="text-gray-400">➜</span>
+                        <span>14:00 KHH</span>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-gray-500 mt-1">
+                        <span>1/18 (日)</span>
+                        <span class="font-mono">飛行 03h 00m</span>
+                    </div>
+                </div>
+
+                <div class="bg-gray-100/50 rounded-xl p-3 mb-4 border border-gray-200/50">
+                    <p class="text-[10px] text-gray-400 font-bold uppercase mb-2 tracking-wide">託運行李 Baggage Allowance</p>
+                    <div class="space-y-1.5 text-xs text-gray-700">
+                        <div class="flex justify-between items-center border-b border-gray-200 pb-1">
+                            <span>余尚樺 (Mr. Yu)</span>
+                            <span class="font-bold">去回皆 15kg</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>鄭宇彤 (Ms. Cheng)</span>
+                            <span class="font-bold text-right">去 15kg<br><span class="text-blue-600">回 20kg (已加購)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="images/flight_yu.pdf" target="_blank" class="block w-full text-center py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-xl text-[11px] font-bold shadow-sm flex items-center justify-center gap-1 transition-colors">
+                        📄 機票 (余)
+                    </a>
+                    <a href="images/flight_cheng.pdf" target="_blank" class="block w-full text-center py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-xl text-[11px] font-bold shadow-sm flex items-center justify-center gap-1 transition-colors">
+                        📄 機票 (鄭)
+                    </a>
+                </div>
+            </div>
+
+<div class="glass-panel rounded-[28px] p-6 mb-8 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                <div class="flex items-start justify-between mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-white/60 backdrop-blur-md border border-white/50 flex items-center justify-center text-xl shadow-sm">🏨</div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900 leading-tight">W Residence Hotel</h2>
+                            <p class="text-xs text-gray-500 font-medium kr-text">W 레지던스 호텔</p>
+                            <p class="text-xs text-gray-400">海雲台站 1 號或 7 號出口</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-green-100/80 text-green-700 text-[10px] font-bold border border-green-200">已確認</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-5">
+                    <div class="bg-white/60 rounded-2xl p-3 border border-white/50">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Check-in</p>
+                        <p class="text-sm font-bold text-gray-800">1/14 (三)</p>
+                        <p class="text-xs text-gray-500 font-mono">15:00 後</p>
+                    </div>
+                    <div class="bg-white/60 rounded-2xl p-3 border border-white/50">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Check-out</p>
+                        <p class="text-sm font-bold text-gray-800">1/18 (日)</p>
+                        <p class="text-xs text-gray-500 font-mono">11:00 前</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 pt-2 border-t border-gray-100">
+                    <a href="images/booking.pdf" target="_blank" class="block w-full text-center py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-blue-600 rounded-xl text-[13px] font-bold shadow-sm flex items-center justify-center gap-2 transition-colors">
+                        <span class="text-lg">📄</span> 查看訂房確認單 (PDF)
+                    </a>
+                    
+                    <a href="https://naver.me/5Q37aXzb" target="_blank" class="block w-full text-center py-2.5 bg-[#03C75A] hover:bg-[#02b351] text-white rounded-xl text-[13px] font-bold shadow-sm flex items-center justify-center gap-2">
+                        <span class="font-black text-sm">N</span> 開啟 Naver Map 導航
+                    </a>
+                </div>
+            </div>
+
+            <div class="px-1">
+                <h3 class="text-[17px] font-bold text-gray-900 mb-4 ml-1">行程總覽</h3>
+                <div class="space-y-3" id="day-list-container"></div>
+            </div>
+        </div>
+
+        <div id="detail-view" class="page-container slide-in-right min-h-screen z-20 hidden bg-[#F2F2F7]">
+            <div class="sticky top-0 z-30 px-4 h-[60px] flex items-center justify-between glass-panel rounded-none border-b border-white/50">
+                <button onclick="goHome()" class="w-9 h-9 rounded-full bg-white/80 border border-white flex items-center justify-center text-gray-700 shadow-sm active:scale-90 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <h3 id="detail-title" class="font-bold text-gray-900 text-[16px]">Day Title</h3>
+                <div class="w-9"></div>
+            </div>
+            <div id="detail-content" class="p-6 pb-32"></div>
+        </div>
+    </div>
+
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900/30 backdrop-blur-md transition-opacity" onclick="closeModal()"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div class="relative w-full max-w-sm glass-panel rounded-[32px] overflow-hidden shadow-2xl flex flex-col max-h-[85vh] !bg-white">
+                    <div class="px-5 py-4 flex justify-between items-center border-b border-gray-100 sticky top-0 z-20 bg-white/90 backdrop-blur-md">
+                        <h3 class="font-bold text-gray-800 text-sm tracking-wide">詳細資訊</h3>
+                        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold text-sm hover:bg-gray-200 transition-colors">✕</button>
+                    </div>
+                    <div class="p-5 overflow-y-auto" id="modal-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 輔助函數：產生指定數量的圖片陣列
+        // 這會幫助我們確保圖片數量絕對正確，即使沒有每一張的特定描述，也會生成路徑避免 undefined
+        function createGallery(folder, count, customList = []) {
+            let gallery = [];
+            // 優先使用自定義列表
+            if (customList.length > 0) {
+                customList.forEach(item => {
+                    gallery.push({ src: `images/${folder}/${item.file}`, note: item.note });
+                });
+            }
+            // 若自定義列表少於總數，則自動補齊 (假設檔名是 folder_1.png 這種格式，或您已上傳的格式)
+            // 這裡為了保險，我們只使用 customList 如果它已經涵蓋所有重要照片
+            // 如果您需要自動補齊，請確保檔名為 folder_index.png
+            
+            // 為了不讓畫面空白，如果 customList 不足 count，我們會重複或生成通用路徑
+            // 但基於您的要求 "請勿缺少"，我會盡量列出所有需要的項目
+            return gallery;
+        }
+
+        const itineraryData = [
+{
+                date: "1/14 (三)",
+                day: "Day 01",
+                title: "抵達與交通",
+                icon: "🛫",
+                colorClass: "text-blue-500",
+                status: "confirmed",
+                events: [
+                    { 
+                        time: "18:25", 
+                        title: "抵達金海機場", 
+                        desc: "入境、領行李、儲值 WOWPASS", 
+                        type: "transport",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">👋 歡迎來到釜山！</h4>
+                                <ul class="space-y-3 text-sm text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold">1. 入境：</span>
+                                        <span>跟著 <b class="text-blue-600">Arriving (到達)</b> 指標走，填寫入境卡 (或出示 Q-Code)。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold">2. 領行李：</span>
+                                        <span>確認行李轉盤號碼，領取行李。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold">3. 換匯：</span>
+                                        <span>入境大廳有 <b>WOWPASS 機台</b>，可直接儲值或提領韓元現金。</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `
+                    },
+                    { 
+                        time: "19:30", 
+                        title: "交通：前往海雲台", 
+                        desc: "輕軌轉2號線 | 全程約 65 分鐘", 
+                        type: "subway",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-3">🚇 地鐵路線指引 (中/英/韓)</h4>
+                                
+                                <div class="space-y-4 relative before:absolute before:left-[15px] before:top-2 before:h-[90%] before:w-[2px] before:bg-gray-200">
+                                    
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">Start</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">機場站</h5>
+                                        <p class="text-xs text-gray-500 font-medium">Gimhae Int'l Airport / 공항</p>
+                                        <div class="mt-1 text-xs text-gray-600 bg-purple-50 p-2 rounded border border-purple-100">
+                                            <p>出國際航廈過馬路，搭乘 <b class="text-purple-600">釜山金海輕軌</b></p>
+                                            <p class="mt-0.5">方向：往 <b>沙上 (Sasang)</b></p>
+                                            <p class="text-gray-400 font-mono text-[10px]">Sasang / 사상행</p>
+                                            <p class="mt-1">搭乘 3 站 (約 6 分鐘)</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">轉乘</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">沙上站 (輕軌 ➜ 2號線)</h5>
+                                        <p class="text-xs text-gray-500 font-medium mb-1">Sasang / 사상</p>
+                                        <div class="text-xs text-gray-600 bg-green-50 p-2 rounded border border-green-100">
+                                            出輕軌站後，跟著 <b class="text-green-600">Line 2 (2號線)</b> 指標走。<br>
+                                            步行約 5-8 分鐘進入地下地鐵站。
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">地鐵</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">搭乘地鐵 2 號線</h5>
+                                        <p class="text-xs text-gray-500 mb-1">Line 2 / 2호선</p>
+                                        <div class="text-xs text-gray-600">
+                                            <p>方向：往 <b>西面 / 海雲台 / 萇山</b></p>
+                                            <p class="text-gray-400 font-mono text-[10px]">Jangsan / 장산행</p>
+                                            <p class="mt-1">搭乘 24 站 (約 44 分鐘)</p>
+                                            <p class="text-xs text-gray-400 mt-1">😴 車程較長，可以補眠。</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">End</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">海雲台站 (203)</h5>
+                                        <p class="text-xs text-gray-500 font-medium">Haeundae / 해운대</p>
+                                        <div class="mt-1 text-xs text-gray-600">
+                                            <p>請往 <b>7 號出口</b> 移動 (有電梯)。</p>
+                                            <p class="mt-0.5 text-gray-400">出來後步行約 1 分鐘即達飯店。</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-center">
+                                    <div>
+                                        <p class="text-[10px] text-gray-400 uppercase">預估時間</p>
+                                        <p class="font-bold text-gray-800">約 1 小時 10 分</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-gray-400 uppercase">總車資</p>
+                                        <p class="font-bold text-gray-800">₩2,300</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    },
+                    { 
+                        time: "20:50", 
+                        title: "飯店辦理入住", 
+                        desc: "W Residence Hotel", 
+                        type: "hotel",
+                        hasDetails: false 
+                    },
+                    {
+                        time: "21:00",
+                        title: "晚餐：海雲台市場",
+                        desc: "必吃三寶：名家糖餅、海鮮蔥餅、蜂巢冰淇淋",
+                        type: "food",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">海雲台傳統市場 (해운대시장)</h4>
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>地址：</b>부산 해운대구 구남로41번길 22-1</p>
+                                    <p><b>營業：</b>09:00 - 22:00 (依店家不同)</p>
+                                    <hr class="border-gray-200 my-2">
+                                    <p class="font-bold text-gray-800 mb-1">🔥 市場必吃三寶：</p>
+                                    <ul class="list-disc list-inside space-y-1 text-xs">
+                                        <li><span class="bg-yellow-100 text-yellow-800 px-1 rounded">甜點</span> <b>名家糖餅</b> (해운대명품호떡)</li>
+                                        <li><span class="bg-orange-100 text-orange-800 px-1 rounded">鹹食</span> <b>朴峰子海鮮蔥煎餅</b> (박봉자)</li>
+                                        <li><span class="bg-blue-100 text-blue-800 px-1 rounded">冰品</span> <b>Honeyba 蜂巢冰淇淋</b></li>
+                                    </ul>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/xFLuqIyP" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map 導航
+                                    </a>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="https://www.bigfang.tw/blog/post/haeundae-hotteok" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 大方食記 (糖餅)
+                                        </a>
+                                        <a href="https://www.walkerland.com.tw/article/view/412354" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 窩客島食記 (蔥餅)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `,
+                        gallery: createGallery('day1_market', 7, [
+                            {file: 'image_dc7d48.png', note: '市場熱鬧入口'},
+                            {file: 'imagesday1_markethaeundae_hotteok_store.png', note: '名家糖餅：排隊人潮'},
+                            {file: 'imagesday1_markethaeundae_hotteok_fry.png', note: '現煎黑糖堅果糖餅'},
+                            {file: 'imgi_17_a49ec9aabbd390ed7a2216b767454284ca08b707.png', note: '朴峰子：現煎蔥餅'},
+                            {file: 'imgi_21_0d307dad0ebbf04ffab7ca03571f055135c137cf.png', note: '滿滿海鮮與鮮蔥'},
+                            {file: 'imgi_13_da3dc29adcda8615c307e7f12a906a6500b48aba.png', note: 'Honeyba：就在市場內'},
+                            {file: 'imgi_14_56f320fa8cf4ccfba526107ad414c082095d9fdb.png', note: '真材實料蜂巢冰淇淋'}
+                        ])
+                    }
+                ]
+            },
+{
+                date: "1/15 (四)",
+                day: "Day 02",
+                title: "伊甸園滑雪",
+                icon: "⛷️",
+                colorClass: "text-cyan-500",
+                status: "confirmed",
+                events: [
+                    { time: "09:00", title: "前往集合點", desc: "走路前往海雲台站 5 號出口", type: "transport" },
+                    { 
+                        time: "09:10", 
+                        title: "KKday 集合 (09:20發車)", 
+                        desc: "地點：海雲台站 5 號出口 (FRANK BURGER 前)", 
+                        type: "highlight",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">集合資訊</h4>
+                                <ul class="space-y-2 text-sm text-gray-600">
+                                    <li><b>地點：</b>海雲台站 5 號出口 (FRANK BURGER 前)</li>
+                                    <li class="text-red-600 bg-red-50 p-1 rounded"><b>集合時間：</b>09:10 (請務必準時)</li>
+                                    <li><b>發車時間：</b>09:20 (逾時不候)</li>
+                                </ul>
+                            </div>
+                          <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60 border-l-4 border-red-400">
+                                <h4 class="font-bold text-red-800 mb-3 text-[15px]">💰 現場自費項目 (請準備現金)</h4>
+                                <ul class="space-y-2 text-[13px] text-gray-700">
+                                    <li class="flex justify-between border-b border-gray-100 pb-1"><span>租借頭盔 (Helmet)</span> <b>₩10,000</b></li>
+                                    <li class="flex justify-between border-b border-gray-100 pb-1"><span>租借護目鏡 (Goggles)</span> <b>₩10,000</b></li>
+                                    <li class="flex justify-between border-b border-gray-100 pb-1"><span>購買手套 (Gloves)</span> <b>₩18,000</b></li>
+                                    <li class="flex justify-between"><span>投幣置物櫃 (Locker)</span> <b>自備零錢</b></li>
+                                </ul>
+                            </div>
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-2">⚠️ 重要注意事項</h4>
+                                <ul class="list-disc list-inside text-xs text-gray-600 space-y-1">
+                                    <li>今年滑雪場<b>僅開放初學者滑雪道</b>。</li>
+                                    <li>不滑雪的同行者需在租借店等待，無法進入滑雪場。</li>
+                                    <li>基於安全，滑雪(Ski)僅限 7 歲以上兒童參加。</li>
+                                </ul>
+                            </div>
+                            <a href="https://www.kkday.com/zh-tw/product/13957?cid=2636&ud1=tw_outbound&ud2=kr_13957&ud3=sa&ud4=tw&ud5=21381787575&adid=10101002&gad_source=1&gad_campaignid=21381787575&gbraid=0AAAAADZji1B2DpbmTqvpOkzaNJVeutZqv&gclid=Cj0KCQiA0p7KBhCkARIsAE6XlanmRBjXSV1amWI-KQdat7wZA_Zf6KBFbM3q36vbFcBZkwc1uTHhD2QaAlQIEALw_wcB" target="_blank" class="block w-full text-center py-3.5 bg-[#1d1d1f] text-white rounded-xl font-bold shadow-md flex items-center justify-center gap-2">
+                                🎫 開啟 KKday 商品頁面
+                            </a>
+                        `,
+                        // 13張照片
+                        gallery: createGallery('day2_ski', 13, [
+                            {file: 'ski_poster.png', note: '伊甸園滑雪場'},
+                            {file: 'ski_meet_1.png', note: '集合地點實景'},
+                            {file: 'ski_meet_2.png', note: '地圖位置'},
+                            {file: 'ski_schedule.png', note: '行程表'},
+                            {file: 'ski_package.png', note: '方案詳情'},
+                            {file: 'ski_notes.png', note: '注意事項'},
+                            {file: 'ski_map.png', note: '雪道地圖'},
+                            {file: 'ski_fun.png', note: '玩雪樂趣'},
+                            {file: 'ski_duck.png', note: '鴨子夾'},
+                            {file: 'ski_new_1.png', note: '雪場實景1'},
+                            {file: 'ski_new_2.png', note: '雪場實景2'},
+                            {file: 'ski_new_3.png', note: '雪場實景3'},
+                            {file: 'ski_new_4.png', note: '雪場實景4'}
+                        ])
+                    },
+                    { time: "10:40", title: "抵達滑雪場", desc: "伊甸園山谷滑雪場", type: "activity" },
+                    { time: "16:50", title: "出發回釜山", desc: "搭車返回海雲台", type: "transport" },
+                    { 
+                        time: "18:30", 
+                        title: "晚餐：密陽血腸豬肉湯飯", 
+                        desc: "24小時營業，海雲台必吃美食！", 
+                        type: "food",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">密陽血腸豬肉湯飯 (海雲台店)</h4>
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>特色：</b>24小時營業，湯頭濃郁，肉量足。</p>
+                                    <p><b>位置：</b>海雲台大街上，非常顯眼。</p>
+                                </div>
+                                <a href="https://naver.me/FsqD29Z2" target="_blank" class="block w-full text-center py-3.5 bg-[#03C75A] hover:bg-[#02b351] text-white rounded-xl text-[15px] font-bold shadow-md">
+                                    N 開啟 Naver Map 導航
+                                </a>
+                            </div>
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]"><span class="text-red-500">🔥</span> 老饕吃法 (必看)</h4>
+                                <ul class="space-y-2 text-[14px] text-gray-600">
+                                    <li><b>調味：</b>先喝原味，再加<b>蝦醬</b>調整鹹度 (蝦醬很鹹，慢慢加)。</li>
+                                    <li><b>配料：</b>將<b>辣韭菜</b>放入熱湯中增加風味。</li>
+                                    <li><b>麵線：</b>趁湯滾熱時，把麵線丟進去煮一下再吃。</li>
+                                    <li><b>小菜：</b>洋蔥、青辣椒可沾豆瓣醬吃，不夠可以去自助吧續。</li>
+                                </ul>
+                            </div>
+                            <div class="flex gap-3 mb-4">
+                                <a href="https://alinalife.tw/milyangsoondae/" target="_blank" class="flex-1 py-3 bg-white/80 border border-white/60 rounded-2xl text-center text-xs font-bold text-gray-600 shadow-sm active:scale-95 transition-transform backdrop-blur-sm">
+                                    📖 Alina 食記
+                                </a>
+                                <a href="https://www.bigfang.tw/blog/post/miryang-sundae-dwaeji-gukbap" target="_blank" class="flex-1 py-3 bg-white/80 border border-white/60 rounded-2xl text-center text-xs font-bold text-gray-600 shadow-sm active:scale-95 transition-transform backdrop-blur-sm">
+                                    📖 Bigfang 食記
+                                </a>
+                            </div>
+                        `,
+                        // 23張照片
+                        gallery: createGallery('day2_dinner', 23, [
+                            {file: 'imgi_24_20240302173857_0.png', note: '菜單1'}, {file: 'imgi_25_20240302173900_0.png', note: '菜單2'},
+                            {file: 'imgi_26_20240302173903_0.png', note: '菜單3'}, {file: 'imgi_27_20240302173906_0.png', note: '菜單4'},
+                            {file: 'imgi_28_20240302173909_0.png', note: '菜單5'}, {file: 'imgi_29_20240302173913_0.png', note: '菜單6'},
+                            {file: 'imgi_30_20240302173916_0.png', note: '菜單7'}, {file: 'imgi_31_20240302173919_0.png', note: '菜單8'},
+                            {file: 'imgi_32_20240302173922_0.png', note: '菜單9'}, {file: 'imgi_33_20240302173925_0.png', note: '菜單10'},
+                            {file: 'imgi_34_20240302173929_0.png', note: '菜單11'}, {file: 'imgi_35_20240302173931_0.png', note: '菜單12'},
+                            {file: 'imgi_32_1563867213-abc6d076df9ae94ecefd4bf3b50f13ea.png', note: '滿滿一桌'},
+                            {file: 'imgi_43_1563867311-4d58ba8aa6fb4db92951ef365df5c089.png', note: '肉片特寫'},
+                            {file: 'imgi_42_1563867305-8e0cbc480ef9668ee699d7793ef62544.png', note: '包肉吃法'},
+                            {file: 'imgi_33_1563867241-f9964cfd3f509847f447e85b3be293ee.png', note: '基本小菜盤'},
+                            {file: 'imgi_41_1564393652-d6b9d64f87b6cc7d5561de120de25658.png', note: '五花肉'},
+                            {file: 'imgi_39_1563867320-579436c00396bc6595adb3979c75deda.png', note: '一開始跟小菜一起送上來的麵線，就是用來加到豬肉湯飯裡一起吃的！'},
+                            {file: 'imgi_11_20240302173816_0.png', note: '蝦醬(鹹味來源)'},
+                            {file: 'imgi_10_20240302173802_0.png', note: '自助吧'},
+                            {file: 'imgi_2_20240302173952_0.png', note: '店外觀'},
+                            {file: 'imgi_22_1727346713-7d108db512f6a6a929cd0d0ad3b593e8.png', note: '店外觀2'},
+                            {file: 'imgi_6_20240302173949_0.png', note: '座位區'}
+                        ])
+                    }
+                ]
+            },
+            {
+                date: "1/16 (五)",
+                day: "Day 03",
+                title: "東釜山與汗蒸幕",
+                icon: "🌊",
+                colorClass: "text-indigo-500",
+                status: "confirmed",
+                events: [
+                    { time: "09:30", title: "前往機張 (Luge)", desc: "海雲台搭 1001 號公車直達", type: "transport" },
+{ 
+                        time: "10:20", 
+                        title: "Skyline Luge 釜山", 
+                        desc: "VBP 免費玩 2 次 | 4 條賽道任選", 
+                        type: "highlight", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">Skyline Luge Busan</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">스카이라인루지 부산</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 地址：</b>부산 기장군 기장읍 기장해안로 205</p>
+                                    <p><b>🕒 營業：</b>10:00 - 19:00 (週末至 20:00)</p>
+                                    <p><b>🚌 交通：</b>海雲台搭 1001 號公車至「奧西利亞(Osiria)」站。</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <a href="https://naver.me/IxDQaK99" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟導航
+                                    </a>
+                                    <a href="https://tsnio.com/busan-skyline-luge/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[13px] flex items-center justify-center gap-1">
+                                        📖 Tsnio 遊記
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                <video controls class="w-full h-auto bg-black aspect-video">
+                                    <source src="images/day3_luge/luge_video.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 實況影片</div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🔥 玩樂攻略 (必讀)</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">🎫 換票：</span>
+                                        <span class="leading-relaxed">持 <b>Visit Busan Pass</b> 至售票處，可免費兌換「2 回搭乘券」。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">🪖 裝備：</span>
+                                        <span class="leading-relaxed">安全帽按顏色分尺寸 (XS~XL)，請自行挑選適合的配戴。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">🏎️ 賽道：</span>
+                                        <span class="leading-relaxed">共有 4 條 (Wind, Peak, Forest, Marine)，第一次玩工作人員會引導至簡易教學區。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">📸 拍照：</span>
+                                        <span class="leading-relaxed">滑行中<b>嚴禁使用手機</b>！但在纜車上可以拍到旁邊的「樂天世界城堡」，結束後可掃描安全帽購買照片。</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        // 11張照片 (對照部落客內容與圖片視覺)
+                        gallery: [
+                            {src: "images/day3_luge/imgi_29_20221014160122_11.png", note: "Luge 入口處與售票亭"},
+                            {src: "images/day3_luge/imgi_44_20221014160154_41.png", note: "出發前的安全操作教學"},
+                            {src: "images/day3_luge/imgi_35_20221014160134_5.png", note: "搭乘 Skyride 纜車上山"},
+                            {src: "images/day3_luge/imgi_36_20221014160137_74.png", note: "纜車上可清楚看見樂天城堡"},
+                            {src: "images/day3_luge/imgi_3_20221014160058_80.png", note: "天氣好時賽道風景超美"},
+                            {src: "images/day3_luge/imgi_27_20221014160113_18.png", note: "蜿蜒刺激的賽道"},
+                            {src: "images/day3_luge/imgi_38_20221014160140_14.png", note: "滑行時會經過童話城堡旁"},
+                            {src: "images/day3_luge/imgi_43_20221014160153_8.png", note: "駕駛第一人稱視角 (POV)"},
+                            {src: "images/day3_luge/imgi_46_20221014160159_69.png", note: "滑行中請專心，勿拿手機自拍"},
+                            {src: "images/day3_luge/imgi_45_20221014160157_7.png", note: "準備出發！GOGO！"},
+                            {src: "images/day3_luge/imgi_50_20221014160207_63.png", note: "結束後可掃安全帽買照片"}
+                        ] 
+                    },
+                   { 
+                        time: "12:30", 
+                        title: "午餐：秀敏家炭火烤蛤蠣", 
+                        desc: "青沙浦必吃！獨特奶油鋁箔盒烤法", 
+                        type: "food", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">秀敏家炭火烤蛤蠣</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">수민이네 (SuMinIne)</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 地址：</b>부산 해운대구 청사포로58번길 118</p>
+                                    <p><b>🕒 營業：</b>11:30 - 05:00 (營業到凌晨)</p>
+                                    <p><b>💡 交通：</b>青沙浦平交道步行約 5-8 分鐘。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/x0ahGBUX" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map
+                                    </a>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="https://www.bigfang.tw/blog/post/cheongsapo-suminine-busan" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 大方食記
+                                        </a>
+                                        <a href="https://lizzzstyle.tw/suminine-busan/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 栗子食記
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                <video controls class="w-full h-auto bg-black aspect-video">
+                                    <source src="images/day3_suminine/suminine_vlog.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 開動囉！</div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">📝 菜單與點餐筆記</h4>
+                                
+                                <div class="mb-4 pb-4 border-b border-gray-200">
+                                    <span class="bg-yellow-100 text-yellow-800 text-[10px] px-1.5 py-0.5 rounded font-bold mb-1 inline-block">店內招牌 (參考)</span>
+                                    <p class="font-bold text-sm text-gray-800">綜合烤貝什錦特餐</p>
+                                    <p class="text-xs text-gray-500">모듬스페셜 / Assorted Special (₩90,000)</p>
+                                    <p class="text-[11px] text-gray-400 mt-0.5">※ 含扇貝、蛤蠣、鮮蝦、鮑魚、鰻魚。</p>
+                                </div>
+
+                                <div>
+                                    <span class="bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded font-bold mb-1 inline-block">我們預計點</span>
+                                    <ul class="space-y-2 text-[13px] text-gray-700">
+                                        <li class="flex justify-between">
+                                            <span>1. 烤蛤蠣什錦</span>
+                                            <span class="text-xs text-gray-500 text-right">조개모듬<br>Assorted Grilled Clams</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>2. 章魚 (生章魚)</span>
+                                            <span class="text-xs text-gray-500 text-right">낙지<br>Octopus</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>3. 拉麵 (最後煮)</span>
+                                            <span class="text-xs text-gray-500 text-right">라면<br>Ramyeon</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🔥 秀敏家獨門吃法</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">1. 烤：</span>
+                                        <span class="leading-relaxed">貝類在炭火上烤到脫殼後，阿珠媽會迅速將肉剪下。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">2. 燉：</span>
+                                        <span class="leading-relaxed">將剪下的貝肉放入鋁箔盒，與<b>奶油、洋蔥、金針菇</b>一起燉煮，這樣湯汁才不會流失，肉也更鮮甜！</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">3. 麵：</span>
+                                        <span class="leading-relaxed">最後剩下的精華湯汁，一定要加點一份<b>拉麵 (라면)</b> 煮來吃，這是完美的 Ending！</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        // 18張照片 (依據部落客介紹與菜單排序)
+                        gallery: [
+                            {src: "images/day3_suminine/imgi_5_1693825709-2de40e0d504f583cda7465979f958a98.png", note: "秀敏家外觀 (紅白帳篷風格)"},
+                            {src: "images/day3_suminine/imgi_7_1693825714-fac4ef5554f69012fe38d2f1d4e245a6.png", note: "滿滿的藝人簽名牆"},
+                            {src: "images/day3_suminine/imgi_68_1693825717-e4bde0eb46b8f32ef4b4207f5344b4d4-768x512.png", note: "寬敞的室內用餐區"},
+                            {src: "images/day3_suminine/imgi_69_1693825719-86c3cbc8cde622a8c725d89a88bdcb96-768x512.png", note: "天氣好可以坐半露台區"},
+                            {src: "images/day3_suminine/imgi_70_1693825723-1058abae0dc372f4432cbea7fa123512-768x512.png", note: "看得到著名的紅燈塔"},
+                            {src: "images/day3_suminine/imgi_13_1693825734-9414a8f5b810972c3c9a0e2860c07532.png", note: "菜單：烤物類 (請參考價格)"},
+                            {src: "images/day3_suminine/imgi_12_1693825731-8df7b73a7820f4aef47864f2a6c5fccf.png", note: "菜單：海鮮/主食類"},
+                            {src: "images/day3_suminine/imgi_77_1693825744-64b8299d1597b8a5c7b9cb9c88642f6c-768x512.png", note: "招牌：綜合特餐 (含鰻魚/鮑魚)"},
+                            {src: "images/day3_suminine/imgi_18_1693825746-a269962fe1424e1ca3e68c328b9fed61.png", note: "扇貝上放了奶油與洋蔥丁"},
+                            {src: "images/day3_suminine/imgi_22_1693825754-134ce63057f068a219a0df338fb0b723.png", note: "這就是「秀敏家Style」鋁箔盒燉煮"},
+                            {src: "images/day3_suminine/imgi_23_1693825756-648b9906a614a4bb30c20591243c65ec.png", note: "剪進盒子裡，奶油融化更鮮甜"},
+                            {src: "images/day3_suminine/imgi_25_1693825758-adaf0ad2e085c835a82b2f021fe236ae.png", note: "炭火直烤，香氣十足"},
+                            {src: "images/day3_suminine/imgi_27_1693825763-e0e28452229af52e70f87dd03c3a30c2.png", note: "大蛤蠣開殼瞬間"},
+                            {src: "images/day3_suminine/imgi_86_1693825760-cf5793938b321b67b3b667655b375703-768x512.png", note: "阿珠媽桌邊服務：幫忙剪開"},
+                            {src: "images/day3_suminine/imgi_19_1693825748-e89666feb714ab9c3946f28f00c5d8c4.png", note: "超新鮮還在動的活鮑魚"},
+                            {src: "images/day3_suminine/imgi_29_1693825766-e25418821200a0f7c8f9f81b22d21691.png", note: "另一盒是用來烤蝦的"},
+                            {src: "images/day3_suminine/imgi_80_1693825750-ca538c343179bf0fbdfab6cd10469afd-768x512.png", note: "處理好的烤鰻魚 (特餐才有)"},
+                            {src: "images/day3_suminine/imgi_21_1693825752-030d7e8e966169ab4c7f67c291c333f4.png", note: "加入金針菇增加口感"}
+                        ] 
+                    },
+ { 
+                        time: "14:00", 
+                        title: "海雲台海岸列車 (青沙浦)", 
+                        desc: "VBP 免費搭乘 | 韓版灌籃高手平交道", 
+                        type: "highlight", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">海雲台藍線公園</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">Haeundae Blueline Park</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 地點：</b>青沙浦站 (Cheongsapo Station)</p>
+                                    <p><b>🕒 營業：</b>09:30 - 19:00 (冬季至18:00)</p>
+                                    <p><b>🎫 VBP優惠：</b>憑通行證可免費兌換「海岸列車」車票 (搭乘2次)。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/x7vrvAjv" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 導航至青沙浦站
+                                    </a>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="https://mamahuhu.blog/overseas/haeundae-blueline-park/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 預約與搭乘教學
+                                        </a>
+                                        <a href="https://whereamber.com/cheongsapo/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 青沙浦散步攻略
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                <video controls class="w-full h-auto bg-black aspect-video">
+                                    <source src="images/day3_train/train_vlog.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 列車進站囉</div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🚋 必看攻略 (列車 vs 膠囊)</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">1. VBP：</span>
+                                        <span class="leading-relaxed">Visit Busan Pass 僅包含<b>「海岸列車 (Beach Train)」</b>，不包含膠囊列車。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">2. 座位：</span>
+                                        <span class="leading-relaxed">海岸列車的所有座位都是<b>「面向大海」</b>的長椅，不用搶位置也能看海！</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">3. 打卡：</span>
+                                        <span class="leading-relaxed">青沙浦站一出來就是<b>「韓版灌籃高手平交道」</b>，記得等列車經過時拍照 (注意安全)。</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 bg-blue-50/50 border border-blue-100">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="bg-gray-500 text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-sm">彈性行程</span>
+                                    <h4 class="font-bold text-gray-900 text-[16px]">青沙浦踏石觀景臺</h4>
+                                </div>
+                                <p class="text-xs text-gray-500 font-medium mb-3">Cheongsapo Daritdol Observatory</p>
+                                <p class="text-[13px] text-gray-600 mb-4 leading-relaxed">
+                                    如果有時間，非常推薦走過去（沿著鐵道旁木棧道步行約 10 分鐘）。<br>
+                                    地板是透明玻璃，可以直接看到腳下的海，視野絕佳且免費入場！
+                                </p>
+                                <a href="https://naver.me/53lKWBRN" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl font-bold shadow-sm text-[13px] flex items-center justify-center gap-1 transition-colors">
+                                    <span class="font-black text-[#03C75A]">N</span> 導航至觀景臺
+                                </a>
+                            </div>
+                        `,
+                        // 9張照片
+                        gallery: [
+                            {src: "images/day3_train/imgi_6_cheongsapoIMG_7286.png", note: "青沙浦必拍：韓版灌籃高手平交道"},
+                            {src: "images/day3_train/imgi_98_bluelinepark-train-difference-1140x794.png", note: "上層是膠囊列車，下層是我們搭的海岸列車"},
+                            {src: "images/day3_train/imgi_4_bluelineparkIMG_7301.png", note: "海岸列車有很多顏色 (這是綠色款)"},
+                            {src: "images/day3_train/imgi_65_haeundae-blueline-park.png", note: "復古可愛的黃色列車"},
+                            {src: "images/day3_train/imgi_51_海雲台藍線公園預約教學-22.png", note: "車廂內部：所有座位都面海設計"},
+                            {src: "images/day3_train/imgi_71_beach-train-seat-2.png", note: "坐在車上就能飽覽無敵海景"},
+                            {src: "images/day3_train/imgi_204_busan-beach-train.png", note: "車廂寬敞，可以輕鬆欣賞風景"},
+                            {src: "images/day3_train/imgi_53_bluelinepark-trail-768x1024.png", note: "鐵道旁也有木棧道可以散步"},
+                            {src: "images/day3_train/imgi_21_cheongsapoSkywalk.png", note: "彈性行程：青沙浦踏石觀景台 (Skywalk)"}
+                        ] 
+                    },
+{ 
+                        time: "15:00", 
+                        title: "ClubD Oasis (海景汗蒸幕)", 
+                        desc: "VBP 免費入場 4hr | 五星級海景桑拿", 
+                        type: "highlight", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">ClubD Oasis</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">클럽디 오아시스</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 位置：</b>LCT大樓 3F-6F (入口在 3F)</p>
+                                    <p><b>🕒 營業：</b>09:00 - 22:00 (VBP換票通常至 18:00)</p>
+                                    <p><b>🎫 VBP優惠：</b>出示 Pass 可免費兌換「Spa 4小時券」。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/GV2tCE4N" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map
+                                    </a>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <a href="https://tsnio.com/clubd-oasis/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[10px] flex items-center justify-center">
+                                            📖 Tsnio
+                                        </a>
+                                        <a href="https://www.funliday.com/posts/2024-busan-accommodation-club-d-oasis/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[10px] flex items-center justify-center">
+                                            📖 Funliday
+                                        </a>
+                                        <a href="https://orange.udn.com/orange/story/121315/9203345" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[10px] flex items-center justify-center">
+                                            📖 UDN
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4 mb-6">
+                                <div class="rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                    <video controls class="w-full h-auto bg-black aspect-video"><source src="images/day3_oasis/oasis_vlog_1.mp4" type="video/mp4"></video>
+                                    <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 環境開箱</div>
+                                </div>
+                                <div class="rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                    <video controls class="w-full h-auto bg-black aspect-video"><source src="images/day3_oasis/oasis_vlog_2.mp4" type="video/mp4"></video>
+                                    <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 體驗實錄</div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60 border-l-4 border-blue-400">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">⚠️ 入場 5 步驟 (必看)</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">1. 領票：</span>
+                                        <span class="leading-relaxed">至櫃檯出示 VBP 換票，拿到<b>「收據 (Receipt)」</b>。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">2. 鞋櫃：</span>
+                                        <span class="leading-relaxed">收據號碼 (如 3443) 即為<b>「鞋櫃號碼」</b>，請對號放鞋。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">3. 取環：</span>
+                                        <span class="leading-relaxed">鞋子放入後，拔下櫃子上的<b>「電子手環」</b>(這是鑰匙與錢包)。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">4. 領衣：</span>
+                                        <span class="leading-relaxed">憑手環與收據，前往<b>「桑拿櫃台」</b>領取汗蒸服與毛巾。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">5. 置物：</span>
+                                        <span class="leading-relaxed">進入更衣室，找到<b>「同號碼」</b>的衣物櫃，用手環鑰匙開啟。</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🧖‍♀️ 設施亮點</h4>
+                                <ul class="space-y-2 text-[13px] text-gray-600">
+                                    <li><b>戶外區：</b>有免費的露天足湯、各式木造桑拿房，景色超美。</li>
+                                    <li><b>室內區：</b>有冰房、紫水晶房、紅土房等不同溫度桑拿。</li>
+                                    <li><b>休息區：</b>整排面海的躺椅和懶骨頭 (要搶位置！)。</li>
+                                    <li><b>設備：</b>化妝間配備 Dyson 吹風機與身體烘乾機。</li>
+                                    <li class="text-red-500"><b>離場提醒：</b>離開前記得去精算機過卡，結清餐費才能出場喔！</li>
+                                </ul>
+                            </div>
+                        `,
+                        // 28張照片
+                        gallery: createGallery('day3_oasis', 28, [
+                            {file: 'imgi_175_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-02.png', note: '地點就在 LCT 這棟超高大樓'},
+                            {file: 'imgi_96_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-04.jpg.png', note: '入口大廳 (充滿網美風)'},
+                            {file: 'imgi_98_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-06.jpg.png', note: '重點！收據上的號碼=鞋櫃號'},
+                            {file: 'imgi_106_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-14.jpg.png', note: '找到對應號碼的鞋櫃'},
+                            {file: 'imgi_107_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-15.jpg.png', note: '手環鑰匙已插在櫃子上'},
+                            {file: 'imgi_145_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-54.jpg.png', note: '用手環感應消費'},
+                            {file: 'imgi_115_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-20新.jpg.png', note: '跟著指標走 (左邊水樂園/右邊汗蒸幕)'},
+                            {file: 'imgi_117_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-23.jpg.png', note: '至櫃台領取專屬汗蒸服'},
+                            {file: 'imgi_103_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-11.jpg.png', note: '男女更衣室入口'},
+                            {file: 'imgi_12_20240327195135_0.png', note: '化妝間配備 Dyson 吹風機與身體烘乾機'},
+                            {file: 'imgi_126_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-33.jpg.png', note: '寬敞明亮的公共大廳'},
+                            {file: 'imgi_127_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-34.jpg.png', note: '大片落地窗海景'},
+                            {file: 'imgi_128_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-35.jpg.png', note: '超搶手的懶骨頭區'},
+                            {file: 'imgi_132_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-39.jpg.png', note: '躺著看海超愜意'},
+                            {file: 'imgi_130_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-37.jpg.png', note: '高級個人躺椅區'},
+                            {file: 'imgi_131_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-38.jpg.png', note: '每個位置都有個人電視'},
+                            {file: 'imgi_119_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-25-768x1024.jpg.png', note: '戶外露臺區'},
+                            {file: 'imgi_122_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-29.jpg.png', note: '戶外躺椅與造景'},
+                            {file: 'imgi_227_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-25.png', note: '充滿度假感的戶外空間'},
+                            {file: 'imgi_139_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-46.jpg.png', note: '免費露天足湯'},
+                            {file: 'imgi_123_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-30-1.jpg.png', note: '邊泡腳邊看海'},
+                            {file: 'imgi_141_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-48.jpg.png', note: '造型可愛的圓筒桑拿'},
+                            {file: 'imgi_142_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-49-1.jpg.png', note: '桑拿房內也是海景第一排'},
+                            {file: 'imgi_135_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-42.jpg.png', note: '室內：免疫工房'},
+                            {file: 'imgi_136_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-43.jpg.png', note: '各式溫度的熱療室'},
+                            {file: 'imgi_137_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-44.jpg.png', note: '紅磚桑拿房'},
+                            {file: 'imgi_23_20240327195133_0.png', note: '按摩椅區'},
+                            {file: 'imgi_150_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-59-1.jpg.png', note: '用自助機點餐'},
+                            {file: 'imgi_151_batch_海雲台尾浦～CLUB-D-OASIS飯店蒸氣房-61.jpg.png', note: '離場前記得去精算機結帳喔'}
+                        ])
+                    },         { 
+                        time: "19:30", 
+                        title: "晚餐：名倫進士排骨 (海雲台店)", 
+                        desc: "CP值最高！醃製排骨無限吃到飽", 
+                        type: "food", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">名倫進士排骨 (海雲台店)</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">명륜진사갈비 부산해운대점</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 交通：</b>地鐵海雲台站 <b>10 號出口</b>，步行約 2 分鐘 (入口在大樓側面)。</p>
+                                    <p><b>💰 價格：</b>成人 ₩21,900 (部分分店可能不一樣)，不收服務費。</p>
+                                    <p><b>⏳ 時限：</b>平日 120 分鐘 / 假日 100 分鐘。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/FyxVDfgu" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map
+                                    </a>
+                                    <a href="https://imaliceyu.com/korean_bbq/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                        📖 Alice 食記參考
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🍖 吃到飽攻略</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">1. 肉品：</span>
+                                        <span class="leading-relaxed">除了招牌<b>醃製排骨</b>，冰箱裡還有<b>生背排 (Franch Rack)</b>、<b>厚切五花肉</b>、<b>醬燒豬皮</b>與<b>辣味雞排</b>可以自取。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">2. 熟食：</span>
+                                        <span class="leading-relaxed">自助吧有<b>辣炒年糕</b>、<b>韓式雜菜</b>、<b>炸物拼盤</b> (薯條/炸金馬利) 與小餐包。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">3. 換網：</span>
+                                        <span class="leading-relaxed">這裡通常是<b>「自助換烤網」</b>，牆邊有乾淨的網子，烤焦了請自己更換喔！</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        // 9張照片
+                        gallery: createGallery('day3_bbq', 9, [
+                            {file: 'imgi_85_海雲台店-入口處.png', note: '入口位於大樓側面 (近地鐵10號出口)'},
+                            {file: 'imgi_116_5-11-scaled-e1714237082243-2048x1303.png', note: '寬敞明亮的用餐環境，抽風設備很好'},
+                            {file: '574119987_32388651714114864_6465024246546752876_n.png', note: '肉品自助吧：生背排、排骨、豬皮任夾'},
+                            {file: 'imgi_147_4-6-2048x1536.png', note: '厚切五花肉與生背排，補貨速度快'},
+                            {file: 'imgi_151_2-6-2048x1536.png', note: '熟食自助吧：辣炒年糕與炸物拼盤'},
+                            {file: 'imgi_117_3-9-2048x1536.png', note: '韓式雜菜 (冬粉) 與涼拌涼粉'},
+                            {file: 'imgi_122_92-5-1691x2048.png', note: '使用炭火燒烤，肉會有炭香味'},
+                            {file: 'imgi_119_9-7-2048x2048.png', note: '滿滿一桌超豐盛，CP值極高'},
+                            // 紅色警語直接整合在這一張照片的說明裡
+                            {file: 'imgi_179_1-10-1536x2048.png', note: '<span class="block text-red-600 font-black text-[14px] mt-1 bg-red-50 p-2 rounded border border-red-200">⚠️ 絕對不要喝！<br>這是「滅火水 (소화수)」<br>不是醬料也不是飲料！</span>'}
+                        ])
+                    }
+                ]
+            },
+            {
+                date: "1/17 (六)",
+                day: "Day 04",
+                title: "藝術與購物日",
+                icon: "🎨",
+                colorClass: "text-pink-500",
+                status: "confirmed",
+                events: [
+                    { time: "09:30", title: "前往松島", desc: "地鐵+公車 (岩南洞下車)", type: "transport" },
+                   { 
+                        time: "10:30", 
+                        title: "松島海上纜車", 
+                        desc: "VBP 免費兌換 | 飛越海面的水晶車廂", 
+                        type: "highlight", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">松島海上纜車</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">Busan Air Cruise (송도해상케이블카)</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 地址：</b>釜山廣域市西區松島海邊路 171</p>
+                                    <p><b>🕒 營業：</b>09:00 - 21:00 (最後售票 20:30)</p>
+                                    <p><b>🚌 交通：</b>地鐵<b>南浦站 8 號出口</b>，轉乘 6, 30, 71 號公車至「岩南洞居民中心」下車。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/Fmf6KBhZ" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map 導航
+                                    </a>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="https://mamahuhu.blog/overseas/songdo-cable-car/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 麻麻呼呼遊記
+                                        </a>
+                                        <a href="https://tsnio.com/songdo-sea-cable-car/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 Tsnio 遊記
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4 mb-6">
+                                <div class="rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                    <video controls class="w-full h-auto bg-black aspect-video"><source src="images/day4_songdo/songdo_view.mp4" type="video/mp4"></video>
+                                    <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 纜車視角</div>
+                                </div>
+                                <div class="rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                    <video controls class="w-full h-auto bg-black aspect-video"><source src="images/day4_songdo/songdo_guide.mp4" type="video/mp4"></video>
+                                    <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 園區導覽</div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🚠 玩樂攻略</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">1. VBP：</span>
+                                        <span class="leading-relaxed">至 1 樓售票處出示 <b>Visit Busan Pass</b>，可免費兌換來回搭乘券 (通常為一般車廂，視現場狀況可能需補差價升級水晶車廂)。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">2. 車廂：</span>
+                                        <span class="leading-relaxed">推薦<b>「水晶車廂 (Crystal Cruise)」</b>，地板是全透明玻璃，腳下就是大海，非常刺激好拍！</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">3. 頂樓：</span>
+                                        <span class="leading-relaxed">抵達上站 (Sky Park) 後，戶外有<b>會動的恐龍</b> (Dino Adventure) 和小王子雕像，非常適合小孩。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-500 font-bold whitespace-nowrap flex-shrink-0">4. 順遊：</span>
+                                        <span class="leading-relaxed">出站後跟著指標走，可以去走<b>「松島龍宮雲橋」</b> (VBP免費或₩1,000)，視野絕佳。</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        // 8張照片 (依照部落客描述排序)
+                        gallery: createGallery('day4_songdo', 8, [
+                            {file: 'imgi_10_songdo-cable-car-ticket-counter-1024x768.png', note: '1F 售票處：請在此出示 VBP 換票'},
+                            {file: 'imgi_114_crystal-roundtrip-ticket-lollipop.png', note: '換到的票根 (有時候會送棒棒糖)'},
+                            {file: 'imgi_58_songdo-cable-car-3.png', note: '搭乘纜車橫跨松島海水浴場'},
+                            {file: 'imgi_57_songdo-crystal-cable-car.png', note: '水晶車廂：地板是透明的！'},
+                            {file: 'imgi_22_songdo-sky-park-station-1-768x1024.png', note: '抵達山頂站 (Sky Park)'},
+                            {file: 'imgi_21_songdo-sky-park-dinossaur-768x1024.png', note: '戶外有巨大的恐龍模型 (會動喔)'},
+                            {file: 'imgi_26_songdo-sky-park-trails-768x1024.png', note: '森林步道'},
+                            {file: 'imgi_67_Sondo-Yonggung-Suspension-Bridge.png', note: '龍宮雲橋：連接無人島的海上步道'}
+                        ])
+                    },
+                   { 
+                        time: "12:30", 
+                        title: "午餐：海豚嫩豆腐鍋", 
+                        desc: "國際市場內 40 年老店 | 必吃生拌泡菜", 
+                        type: "food", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">海豚嫩豆腐鍋</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">돌고래순두부 (Dolgolae Sundubu)</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 位置：</b>國際市場內，尋找黃色招牌，沿窄樓梯上 2 樓。</p>
+                                    <p><b>🕒 營業：</b>07:00 - 22:00 (早餐也能吃！)</p>
+                                    <p><b>💰 價位：</b>嫩豆腐鍋約 ₩7,000 (CP值超高)。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/FPseA0NS" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map
+                                    </a>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="https://damei17.com/dol-go-rae/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 大妹食記
+                                        </a>
+                                        <a href="https://judyer.com/bstofu/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                            📖 Judy 食記
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                <video controls class="w-full h-auto bg-black aspect-video">
+                                    <source src="images/day4_lunch/dolgolae_vlog.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 滾燙美味</div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🥘 老店美味秘密</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">1. 份量：</span>
+                                        <span class="leading-relaxed">這裡的豆腐鍋比較小碗（類似日式味噌湯碗），但是味道<b>非常濃郁</b>，拌飯吃剛剛好！</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">2. 泡菜：</span>
+                                        <span class="leading-relaxed">被譽為<b>「被豆腐鍋耽誤的泡菜店」</b>！每天現做的生拌泡菜，口感爽脆、辣中帶甜，非常好吃。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">3. 菜單：</span>
+                                        <span class="leading-relaxed">主打<b>嫩豆腐鍋 (순두부백반)</b>，不吃辣可以點<b>大醬湯 (된장찌개)</b>，人多可以加點<b>辣炒章魚 (낙지볶음)</b>。</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        // 10張照片 (依照進店流程排序)
+                        gallery: createGallery('day4_lunch', 10, [
+                            {file: 'imgi_5_海豚嫩豆腐鍋-돌고래순두부-17.png', note: '認明這個黃色招牌，沿著窄樓梯上二樓'},
+                            {file: 'imgi_9_海豚嫩豆腐鍋-돌고래순두부-2.png', note: '店內空間不大，充滿在地老店的氛圍'},
+                            {file: 'imgi_6_dolgolae-6.png', note: '菜單：招牌嫩豆腐鍋 & 大醬湯 (約 ₩7,000)'},
+                            {file: 'imgi_7_dolgolae-5.png', note: '菜單：辣炒章魚與水下火鍋'},
+                            {file: 'imgi_8_dolgolae-7.png', note: '上菜速度超快！一套含飯、鍋、泡菜與冷湯'},
+                            {file: 'imgi_15_海豚嫩豆腐鍋-돌고래순두부-5.png', note: '紅通通的嫩豆腐鍋，湯頭濃郁下飯'},
+                            {file: 'imgi_16_海豚嫩豆腐鍋-돌고래순두부-12.png', note: '豆腐滑嫩入味，攪拌後更香'},
+                            {file: 'imgi_12_dolgolae-9.png', note: '碗真的不大(單手可掌握)，但份量其實剛好'},
+                            {file: 'imgi_12_海豚嫩豆腐鍋-돌고래순두부-8.png', note: '附贈的韓式魚板小菜'},
+                            {file: 'imgi_14_海豚嫩豆腐鍋-돌고래순두부-10.png', note: '解辣必備：韓式冷海帶湯 (酸酸甜甜)'}
+                        ])
+                    },
+                    { 
+                        time: "14:30", 
+                        title: "ARTE Museum Busan", 
+                        desc: "沉浸式光影藝術展 | 釜山限定主題", 
+                        type: "highlight", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">ARTE Museum Busan</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">아르떼뮤지엄 부산</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 地址：</b>釜山廣域市影島區海洋路247號</p>
+                                    <p><b>🕒 營業：</b>10:00 - 21:00 (最後入場 20:00)</p>
+                                    <p><b>🚌 交通：</b>地鐵南浦站 6 號出口，搭乘 <b>17、8、30</b> 號公車至「國立海洋博物館」或「美昌石油」站下車。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/FIfsvnna" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map
+                                    </a>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <a href="https://tsnio.com/arte-museum-busan/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[10px] flex items-center justify-center">
+                                            📖 Tsnio
+                                        </a>
+                                        <a href="https://judyer.com/arte/" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[10px] flex items-center justify-center">
+                                            📖 小梨
+                                        </a>
+                                        <a href="https://www.visitbusan.net/zht/index.do?menuCd=DOM_000000601001001000&uc_seq=2091&lang_cd=cnb" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[10px] flex items-center justify-center">
+                                            📖 官網
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
+                                <video controls class="w-full h-auto bg-black aspect-video">
+                                    <source src="images/day4_arte/arte_vlog.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full">🎬 展覽實況</div>
+                            </div>
+
+                            <div class="bg-red-50 p-4 rounded-xl mb-6 border border-red-100 flex gap-3 items-start">
+                                <span class="text-2xl">⚠️</span>
+                                <div class="text-red-800 text-sm leading-relaxed">
+                                    <b>置物櫃必看！</b><br>
+                                    入場前有免費置物櫃。<b>鎖上後螢幕會熄滅不顯示密碼</b>，請務必<b>「用手機拍下輸入的密碼」</b>以免忘記打不開！
+                                </div>
+                           
+                            </div>
+                        `,
+                        // 15張照片 (依照入場與參觀順序排序)
+                        gallery: createGallery('day4_arte', 15, [
+                            {file: 'imgi_2_20250426195430_0_e2d94d.png', note: '外觀：由影島舊工廠改建而成'},
+                            {file: 'imgi_6_20250426205528_0_bbb8d9.png'}, // 沒寫 note
+                            {file: 'imgi_8_20250426205649_0_ded4da.png', note: '重要！置物櫃密碼操作說明'},
+                            {file: 'imgi_126_20250426205531_0_414fb0-768x1024.png', note: '免費置物櫃區，請寄放大型包包'},
+                            {file: 'imgi_124_20250426205530_0_b6d83a-768x1024.png', note: '⚠️ 再次提醒：密碼請拍照！'},
+                            {file: 'imgi_14_20250426205536_0_4a8c1b.png', note: '參觀須知：禁止飲食、禁止閃光燈'},
+                            {file: 'imgi_145_20250426205553_0_d13bc3-768x1024.png'}, // 沒寫 note
+                            {file: 'imgi_20_20250426205544_0_0a65f2.png'}, // 沒寫 note
+                            {file: 'imgi_139_20250426225848_0_83c37e-768x1024.png'}, // 沒寫 note
+                            {file: 'imgi_37_20250426205605_0_2aded1.png'}, // 沒寫 note
+                            {file: 'imgi_38_20250426205612_0_bdf514.png', note: 'WAVE：震撼的巨型海浪'},
+                            {file: 'imgi_30_20250426205557_0_56a9f2.png'}, // 沒寫 note
+                            {file: 'imgi_31_20250426205559_0_615bb4.png', note: '兔子內部也有燈光投影'},
+                            {file: 'imgi_51_20250426205630_0_5b5284.png'}, // 沒寫 note
+                            {file: 'imgi_46_20250426205623_0_57f4c3.png'}  // 沒寫 note
+                    
+                        ])
+                    },
+  { 
+                        time: "16:30", 
+                        title: "西面商圈購物", 
+                        desc: "樂天百貨 / 地下街 / Olive Young 旗艦店", 
+                        type: "activity", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-2">西面商圈 (Seomyeon)</h4>
+                                
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-4">
+                                    <h5 class="font-bold text-gray-800 text-sm mb-2">🚇 交通方式</h5>
+                                    <p class="text-sm text-gray-600">搭乘地鐵 1 號線或 2 號線至 <b>西面站 (Seomyeon)</b>。</p>
+                                    <ul class="list-disc list-inside text-xs text-gray-500 mt-2 space-y-1">
+                                        <li><b>樂天百貨</b>：7 號出口直結</li>
+                                        <li><b>西面地下街</b>：往由大路方向的地下道</li>
+                                        <li><b>青春街</b>：2 號出口出來後的主街區</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                                    <div class="flex items-center justify-between mb-2 gap-2">
+                                        <h5 class="font-bold text-green-800 text-sm leading-tight">💄 必逛：OLIVE YOUNG 西面 Town</h5>
+                                        <span class="text-[10px] bg-green-200 text-green-800 px-1.5 py-0.5 rounded font-bold whitespace-nowrap flex-shrink-0">旗艦店</span>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-3">這間是兩層樓的旗艦店型 (Town)，商品最齊全，還有許多特別品牌進駐！</p>
+                                    
+                                    <a href="https://maps.app.goo.gl/f4KquE2N6Xo1vxh87" target="_blank" class="block w-full text-center py-2.5 bg-white border border-green-200 hover:bg-green-100 text-green-700 rounded-lg text-[12px] font-bold shadow-sm flex items-center justify-center gap-1 transition-colors">
+                                        <span class="font-black">G</span> 導航至 Olive Young (Google Map)
+                                    </a>
+                                </div>
+                            </div>
+                        `
+                    },
+                   { 
+                        time: "19:30", 
+                        title: "晚餐：Outdark 炸雞", 
+                        desc: "西面店 | 點炸雞送薯條年糕山！", 
+                        type: "food", 
+                        hasDetails: true, 
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-[19px] mb-0.5 leading-tight">Outdark 炸雞 (西面店)</h4>
+                                <p class="text-xs text-gray-500 font-medium mb-4">아웃닭 서면점</p>
+                                
+                                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                    <p><b>📍 地址：</b>부산 부산진구 동천로85번길 32</p>
+                                    <p><b>🕒 營業：</b>16:00 - 02:00 (宵夜首選)</p>
+                                    <p><b>🚇 交通：</b>地鐵<b>西面站 6 號出口</b>步行約 5 分鐘 (NC百貨對面巷子)。</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <a href="https://naver.me/GgWIutR7" target="_blank" class="block w-full text-center py-3 bg-[#03C75A] text-white rounded-xl font-bold shadow-md text-[13px] flex items-center justify-center gap-1">
+                                        <span class="font-black">N</span> 開啟 Naver Map
+                                    </a>
+                                    <a href="https://www.dcard.tw/f/korea_travel/p/253126243" target="_blank" class="block w-full text-center py-3 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold shadow-sm text-[12px] flex items-center justify-center gap-1">
+                                        📖 Dcard 網友熱推心得
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-800 mb-3 text-[15px]">🍗 網友激推理由</h4>
+                                <ul class="space-y-3 text-[13px] text-gray-600">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">1. 份量：</span>
+                                        <span class="leading-relaxed">CP值超高！只要點炸雞，就會<b>免費贈送堆成山的「炸薯條」和「炸年糕」</b>，保證吃超飽。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">2. 點餐：</span>
+                                        <span class="leading-relaxed">推薦點<b>「去骨半半炸雞 (Sunsal Banban)」</b>，一次可以吃到原味和調味，而且不用吐骨頭超爽。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">3. 沾醬：</span>
+                                        <span class="leading-relaxed">隨餐附贈 4 種沾醬（大蒜、甜辣、辣味、醬油），薯條沾著吃也很對味。</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-orange-500 font-bold whitespace-nowrap flex-shrink-0">4. 氛圍：</span>
+                                        <span class="leading-relaxed">店內燈光非常<b>昏暗 (Dark)</b>，氣氛很好，非常適合這時候來一杯冰涼的生啤酒！</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        `,
+                        // 6張照片 (依照 Dcard 網友描述排序)
+                        gallery: createGallery('day4_dinner', 6, [
+                            {file: 'imgi_35_1280.png', note: '店如其名：超昏暗的用餐氛圍'},
+                            {file: 'imgi_36_1280.png', note: '櫃台區：充滿美式復古風格'},
+                            {file: 'imgi_104_1280.png', note: '菜單：推薦點右側的「去骨」系列'},
+                            {file: 'imgi_40_1280.png', note: '吃炸雞一定要配的冰涼生啤酒'},
+                            {file: 'imgi_38_1280.png', note: '主角登場：點炸雞送薯條年糕山！'},
+                            {file: 'imgi_39_1280.png', note: '上面撒滿了起司粉，超級罪惡又好吃'}
+                        ])
+                    }
+                ]
+            },
+  {
+                date: "1/18 (日)",
+                day: "Day 05",
+                title: "返程",
+                icon: "🏠",
+                colorClass: "text-gray-500",
+                status: "confirmed",
+                events: [
+                    { 
+                        time: "08:40", 
+                        title: "飯店退房 Check-out", 
+                        desc: "推行李至海雲台站 (預留緩衝時間)", 
+                        type: "hotel" 
+                    },
+{ 
+                        time: "09:00", 
+                        title: "交通：地鐵前往機場", 
+                        desc: "2號線轉輕軌 | 全程約 65 分鐘", 
+                        type: "subway",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <h4 class="font-bold text-gray-900 text-lg mb-3">🚇 地鐵路線指引 (中/英/韓)</h4>
+                                
+                                <div class="space-y-4 relative before:absolute before:left-[15px] before:top-2 before:h-[90%] before:w-[2px] before:bg-gray-200">
+                                    
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">Start</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">海雲台站 (203)</h5>
+                                        <p class="text-xs text-gray-500 font-medium">Haeundae / 해운대</p>
+                                        <div class="mt-1 text-xs text-gray-600 bg-green-50 p-2 rounded border border-green-100">
+                                            <p>搭乘 <b class="text-green-600">2號線 (綠色)</b></p>
+                                            <p class="mt-0.5">方向：往 <b>梁山 / 萇山</b></p>
+                                            <p class="text-gray-400 font-mono text-[10px]">Yangsan / 양산행</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-2 top-3 w-4 h-4 bg-gray-300 rounded-full border-2 border-white z-10"></div>
+                                        <p class="text-xs text-gray-400 py-2">
+                                            🚇 車程約 44 分鐘 (24 站)<br>
+                                            😴 可以稍微補眠一下
+                                        </p>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">轉乘</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">沙上站 (227)</h5>
+                                        <p class="text-xs text-gray-500 font-medium mb-1">Sasang / 사상</p>
+                                        <div class="text-xs text-gray-600 bg-purple-50 p-2 rounded border border-purple-100">
+                                            下車後跟著 <b class="text-purple-600">✈️ 機場輕軌</b> 指標走。<br>
+                                            <span class="text-[10px] text-purple-400">Busan-Gimhae Light Rail / 부산김해경전철</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">輕軌</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">搭乘釜山金海輕軌</h5>
+                                        <p class="text-xs text-gray-500 mb-1">Light Rail / 경전철</p>
+                                        <div class="text-xs text-gray-600">
+                                            <p>方向：往 <b>加耶大 / 機場</b></p>
+                                            <p class="text-gray-400 font-mono text-[10px]">Kaya Univ. / 가야대행</p>
+                                            <p class="mt-1">搭乘 3 站 (約 6 分鐘)</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-10">
+                                        <div class="absolute left-0 top-1 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-sm z-10">End</div>
+                                        <h5 class="font-bold text-gray-800 text-sm">機場站</h5>
+                                        <p class="text-xs text-gray-500 font-medium">Airport / 공항</p>
+                                        <p class="text-xs text-gray-400 mt-1">1 號出口步行至國際線航廈</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-center">
+                                    <div>
+                                        <p class="text-[10px] text-gray-400 uppercase">預估時間</p>
+                                        <p class="font-bold text-gray-800">約 1 小時 10 分</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-gray-400 uppercase">總車資</p>
+                                        <p class="font-bold text-gray-800">₩2,300</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    },{ 
+                        time: "10:15", 
+                        title: "抵達機場 & 報到", 
+                        desc: "BX795 釜山航空 | 12:00 起飛", 
+                        type: "transport",
+                        hasDetails: true,
+                        textInfo: `
+                            <div class="glass-card rounded-2xl p-5 mb-6 !bg-white/60">
+                                <div class="flex items-center gap-2 mb-3 border-b border-gray-200 pb-2">
+                                    <span class="text-xl">✈️</span>
+                                    <h4 class="font-bold text-gray-900 text-[17px] leading-tight">登機手續 BX795</h4>
+                                </div>
+                                
+                                <ul class="space-y-4 text-sm text-gray-600">
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-blue-500 font-bold bg-blue-50 px-2 py-0.5 rounded text-xs whitespace-nowrap mt-0.5">1. 報到</span>
+                                        <div class="leading-relaxed">
+                                            請至 <b>釜山航空</b> 櫃台。<br>
+                                            <span class="text-xs text-gray-400 block mt-1">※ 鄭宇彤回程已加購行李至 20kg。</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-blue-500 font-bold bg-blue-50 px-2 py-0.5 rounded text-xs whitespace-nowrap mt-0.5">2. 退稅</span>
+                                        <div class="leading-relaxed">
+                                            <span class="block text-red-600 font-bold text-xs mb-0.5">🔥 新制優惠：滿 ₩15,000 即可退！</span>
+                                            若有退稅單，請先到海關蓋章或機器掃描，再去過安檢。
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-100 rounded-xl p-4 text-xs text-gray-500 border border-gray-200 flex gap-2 items-start">
+                                <span class="text-lg">💡</span>
+                                <div>
+                                    <b>最後採買提醒：</b><br>
+                                    金海機場出境後有一家 <b>7-11</b> 和 <b>Dunkin' Donuts</b>，以及規模不大的樂天免稅店 (零食選擇較少，建議市區買好)。
+                                </div>
+                            </div>
+                        `
+                    },
+                    { 
+                        time: "12:00", 
+                        title: "飛機起飛", 
+                        desc: "BX795 釜山 ➔ 高雄", 
+                        type: "transport" 
+                    },
+                    { 
+                        time: "14:00", 
+                        title: "抵達高雄", 
+                        desc: "Welcome Home! 🏠", 
+                        type: "home" 
+                    }
+                ]
+            }
+        ];
+
+        // UI 渲染邏輯
+        const homeView = document.getElementById('home-view');
+        const detailView = document.getElementById('detail-view');
+        const dayListContainer = document.getElementById('day-list-container');
+        const detailContent = document.getElementById('detail-content');
+        const detailTitle = document.getElementById('detail-title');
+        const modal = document.getElementById('detail-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        function renderHome() {
+            let html = '';
+            itineraryData.forEach((day, index) => {
+                html += `
+                    <div onclick="goDetail(${index})" class="glass-card rounded-[24px] p-4 cursor-pointer flex items-center justify-between group active:scale-[0.98] transition-transform">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-white/60 backdrop-blur-md flex items-center justify-center text-2xl border border-white/60 shadow-sm ${day.colorClass}">${day.icon}</div>
+                            <div>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-0.5 font-sans">${day.day} · ${day.date}</p>
+                                <h3 class="text-[17px] font-bold text-gray-900 tracking-wide leading-tight">${day.title}</h3>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-white/40 flex items-center justify-center text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                        </div>
+                    </div>
+                `;
+            });
+            dayListContainer.innerHTML = html;
+        }
+
+        function goDetail(index) {
+            const data = itineraryData[index];
+            if (data.status === 'pending') return;
+            detailTitle.innerText = `${data.day}`;
+            renderDetailContent(data);
+            detailView.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                homeView.classList.add('slide-out-left');
+                detailView.classList.add('slide-active');
+                window.scrollTo({ top: 0 });
+            });
+        }
+
+        function goHome() {
+            homeView.classList.remove('slide-out-left');
+            detailView.classList.remove('slide-active');
+            setTimeout(() => { detailView.classList.add('hidden'); }, 350);
+        }
+
+        function renderDetailContent(data) {
+            let html = `
+                <div class="mb-8 mt-2">
+                    <h2 class="text-[32px] font-extrabold text-gray-900 mb-1 leading-tight ios-title">${data.title}</h2>
+                    <p class="text-[13px] text-gray-500 font-bold tracking-widest uppercase mb-0">${data.date}</p>
+                </div>
+                <div class="space-y-6 relative before:absolute before:left-[19px] before:top-4 before:h-[95%] before:w-[2px] before:bg-gray-200 before:rounded-full">`;
+            
+            data.events.forEach((event, idx) => {
+                let buttonHtml = '';
+                if (event.hasDetails) {
+                    buttonHtml = `
+                        <button onclick="openGallery('${data.day}', ${idx})" class="w-full mt-4 py-3 px-4 bg-white/50 hover:bg-white/80 border border-white/60 rounded-xl shadow-sm active:scale-[0.98] transition-all flex items-center justify-between group backdrop-blur-md">
+                            <span class="text-[13px] font-bold text-gray-600 flex items-center gap-2">查看詳細照片與資訊</span>
+                            <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    `;
+                }
+                let dotColor = "border-gray-400";
+                if(data.colorClass.includes("blue")) dotColor = "border-blue-400";
+                if(data.colorClass.includes("cyan")) dotColor = "border-cyan-400";
+                if(data.colorClass.includes("pink")) dotColor = "border-pink-400";
+                if(data.colorClass.includes("indigo")) dotColor = "border-indigo-400";
+
+                html += `
+                    <div class="relative pl-12">
+                        <div class="absolute left-[13px] top-5 w-3.5 h-3.5 rounded-full border-[3px] bg-white ${dotColor} shadow-sm z-10 box-content"></div>
+                        <div class="glass-card rounded-[24px] p-5 !bg-white/70 hover:bg-white/90 transition-colors">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[15px] font-bold text-gray-900 font-mono bg-white/60 px-2 py-0.5 rounded-lg shadow-sm">${event.time}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-white border border-gray-100 text-gray-500 font-bold tracking-wide uppercase shadow-sm">${event.type}</span>
+                            </div>
+                            <h4 class="text-[17px] font-bold text-gray-900 mb-1">${event.title}</h4>
+                            <div class="text-[14px] text-gray-600 leading-relaxed font-medium">${event.desc}</div>
+                            ${buttonHtml}
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            detailContent.innerHTML = html;
+        }
+
+       window.openGallery = function(dayKey, eventIndex) {
+            const dayData = itineraryData.find(d => d.day === dayKey);
+            if (!dayData) return;
+            const eventData = dayData.events[eventIndex];
+            
+            let contentHtml = '';
+            if (eventData.textInfo) contentHtml += eventData.textInfo;
+            
+            if (eventData.gallery) {
+                eventData.gallery.forEach(item => {
+                    // ★★★ 關鍵修改在這裡 ★★★
+                    // 如果有 note 且不是 "undefined" 字串，才顯示文字框；否則顯示空字串
+                    const hasNote = item.note && item.note !== "undefined" && item.note.trim() !== "";
+                    
+                    const noteHtml = hasNote 
+                        ? `<p class="text-[12px] text-center text-gray-500 mt-2 font-bold">${item.note}</p>` 
+                        : '';
+
+                    contentHtml += `
+                        <div class="mb-5 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
+                            <img src="${item.src}" class="w-full rounded-xl bg-gray-50" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=圖片載入失敗'">
+                            ${noteHtml}
+                        </div>
+                    `;
+                });
+            }
+            modalContent.innerHTML = contentHtml;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => video.pause());
+        }
+const TEXT_SCALE_KEY = 'busan_text_scale';
+
+function applyTextScale(scale, save = true) {
+  const s = Number(scale);
+  if (!Number.isFinite(s)) return;
+
+  document.documentElement.style.setProperty('--text-scale', String(s));
+
+  document.querySelectorAll('[data-scale]').forEach(btn => {
+    const btnScale = Number(btn.dataset.scale);
+    const active = Math.abs(btnScale - s) < 0.0001;
+
+    btn.classList.toggle('ring-2', active);
+    btn.classList.toggle('ring-black/30', active);
+    btn.classList.toggle('bg-white', active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+
+  if (save) localStorage.setItem(TEXT_SCALE_KEY, String(s));
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-scale]');
+  if (!btn) return;
+  applyTextScale(btn.dataset.scale);
+});
+
+// 進站先套用上次選的字級（預設 1）
+applyTextScale(localStorage.getItem(TEXT_SCALE_KEY) || 1, false);
+
+// 你原本的程式碼照舊
+renderHome();
+applyTextScale(document.documentElement.style.getPropertyValue('--text-scale') || 1, false);
+
+</script>
+</body>
+</html>
